@@ -118,9 +118,9 @@ Connect users by **compatibility rather than superficial traits**, enabling high
 
 Beriko’s profile and matching engine is inspired by academic and industry research on **personalization, digital twins, and behavioral matching**.
 
-### 🔬 Key Paper: “Personality-Based Online Matching Using Digital Twin Models”
+### 🔬 Key Paper: PERSONATWIN: A MULTI-TIER PROMPT CONDITIONING FRAMEWORK FOR GENERATING AND EVALUATING PERSONALIZED DIGITAL TWINS”
 
-- **Authors / Year:** [Add actual reference if needed]
+- **Authors / Year:  Sihan Chen, John P. Lalor, Yi Yang,  Ahmed Abbasi / 2025** 
 - **Core Idea:**
   - Users can be represented as **dynamic, multidimensional vectors** capturing personality, interests, and behavior.
   - Incremental updates and embeddings allow the system to **adapt over time** as users interact.
