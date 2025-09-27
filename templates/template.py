@@ -1,6 +1,6 @@
 def generate_psychological_template(vars = []):
     template = "Their psychological traits shed light on core motivations and mindset. "
-    if not vars or len(vars) == 0:
+    if not vars :
         return "<N/A>"
     for var in vars:
             score = var["value"]
@@ -17,7 +17,7 @@ def generate_psychological_template(vars = []):
 def generate_demographic_template(vars = []):
     template = "Foundational demographic factors further contextualize their identity. "
 
-    if not vars or len(vars) == 0:
+    if not vars :
         return "<N/A>"
     
     for var in vars:
@@ -38,7 +38,7 @@ def generate_behavioral_template(variables=[]):
     template = ("This individual's behavioral patterns reveal how they express themselves and interact with their environment. "
                 "These patterns provide observable cues about their communication style, social preferences, and habitual actions. ")
     
-    if not vars or len(vars) == 0:
+    if not vars :
         return "<N/A>"
 
     # Variable-driven detailed sentences

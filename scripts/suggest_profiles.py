@@ -1,6 +1,6 @@
 from entities.Persona.model import Persona
-from matching.cosine_similarity import get_similarity
-from matching.manhattan_distance import calculate_manhattan_distance
+from scripts.matching.cosine_similarity import get_similarity
+from scripts.matching.manhattan_distance import calculate_manhattan_distance
 
 
 

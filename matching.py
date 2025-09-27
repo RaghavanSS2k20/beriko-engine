@@ -1,7 +1,7 @@
 from flask import jsonify,Blueprint
 from scripts.suggest_profiles import get_matching_for_profile
 from utils.send_response import send_response
-suggestions_module = Blueprint("suggestions")
+suggestions_module = Blueprint("suggestions",__name__)
 
 @suggestions_module.route("/<user>", methods=['GET'])
 def get_suggestions(user):

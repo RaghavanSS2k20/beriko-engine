@@ -1,4 +1,5 @@
 from flask import Blueprint, request, jsonify
+import json
 
 persona_route = Blueprint("persona",__name__)
 from .model import Persona
@@ -17,12 +18,13 @@ def update_user():
             # Create new persona
             
             persona = handle_create_persona(user_id)
-            return send_response(success=True, data=persona, message="Persona created successfully")
+            return send_response(success=True, data=persona.to_json(), message="Persona created successfully")
         elif request.method == 'PATCH':
             # Update existing persona
             persona = handle_update_persona(user_id)
             return send_response(success=True, data=persona, message="Persona updated successfully")
     except Exception as e:
+        print(e)
         return send_response(success=False, error=str(e), message="Error while processing persona", status_code=500)
     
 

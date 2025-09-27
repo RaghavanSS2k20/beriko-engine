@@ -6,9 +6,12 @@ class Variable(EmbeddedDocument):
     value = FloatField(required=True)
 
 class Trait(Document):
-    user_id = StringField(required=True, unique=True)
+    user_id = StringField(required=True)
     type = StringField(required=True, choices=('behavioral', 'psychological', 'demographic'))
     variables = ListField(EmbeddedDocumentField(Variable))
 
-
-
+    meta = {
+        'indexes': [
+            {'fields': ['user_id', 'type'], 'unique': True}
+        ]
+    }

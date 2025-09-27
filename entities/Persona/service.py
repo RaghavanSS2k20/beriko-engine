@@ -58,12 +58,46 @@ def handle_create_persona(user_id):
     return persona
 
 
-def update_interests(user_id, interests):
+def update_interests(user_id, interests, alpha=0.3):
+    """
+    Update or add interests for a Persona using weighted updates.
+
+    Args:
+        user_id: str
+        interests: list of dicts with 'slug', 'name', 'value'
+        alpha: float, learning rate for smoothing
+    """
     persona = Persona.objects.get(user_id=user_id)
-    existing_intrests = persona.intrests
-    updated_interests = update_variable_weights(old_weights=existing_intrests, new_weights=interests)
-    persona.intrests = update_interests
+
+    # Convert existing interests into dicts
+    existing_vars = [
+        {"slug": v.slug, "name": v.name, "value": v.value}
+        for v in persona.intrests
+    ]
+
+    # Apply weighted update
+    updated_vars = update_variable_weights(existing_vars, interests, alpha=alpha)
+
+    # Merge back into persona.intrests (update existing or add new)
+    variable_map = {v.slug: v for v in persona.intrests}
+
+    for v in updated_vars:
+        slug = v["slug"]
+        name = v.get("name", slug)
+        value = v["value"]
+
+        if slug in variable_map:
+            variable_map[slug].name = name
+            variable_map[slug].value = value
+        else:
+            persona.intrests.append(Variable(slug=slug, name=name, value=value))
+
     persona.save()
-    return persona    
+
+    result = [
+        {"slug": v.slug, "name": v.name, "value": v.value}
+        for v in persona.intrests
+    ]
+    return {"success": True, "data": result}
 
 

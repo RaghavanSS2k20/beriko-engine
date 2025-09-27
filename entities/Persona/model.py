@@ -3,5 +3,5 @@ from ..Trait.model import Trait, Variable
 class Persona(Document):
     user_id =  StringField(required=True)
     charecter_persona = StringField(required=True)
-    traits = ListField(EmbeddedDocumentField(Trait), required=True, min_length=3, max_length=3)
-    intrests = ListField(EmbeddedDocument(Variable),default=list)
+    traits = ListField(ReferenceField(Trait, reverse_delete_rule=2), required=True, min_length=3, max_length=3)
+    intrests = ListField(EmbeddedDocumentField(Variable),default=list)

@@ -4,6 +4,7 @@ import os
 from dotenv import load_dotenv
 
 from entities.Persona.routes import persona_route
+from entities.Trait.routes import trait_route
 from matching import suggestions_module
 
 load_dotenv()
@@ -19,6 +20,7 @@ def index():
 
 app.register_blueprint(persona_route,url_prefix="/persona")
 app.register_blueprint(suggestions_module, url_prefix="/suggestions")
+app.register_blueprint(trait_route, url_prefix="/trait")
 
 
 if __name__ == '__main__':
