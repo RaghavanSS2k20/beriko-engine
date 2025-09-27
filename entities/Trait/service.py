@@ -119,6 +119,8 @@ def handle_update_traits(user_id,data):
     response_data = {}
     errors = {}
 
+    print("DATA HERE  :", data, type(data))
+
     # Map keys to trait types
     type_map = {
         "psy": "psychological",
