@@ -94,6 +94,7 @@ def update_traits(user_id, trait_type, variables):
                 trait.variables.append(Variable(slug=slug, name=name, value=value))
 
         trait.save()
+        handle_update_persona(user_id)
 
         result = [
             {"slug": v.slug, "name": v.name, "value": v.value}

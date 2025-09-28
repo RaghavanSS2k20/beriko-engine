@@ -1,4 +1,4 @@
-def update_variable_weights(old_weights, new_weights, alpha=0.3, decay=0.1):
+def update_variable_weights(old_weights, new_weights, alpha=0.3, decay=0.01):
     """
     Update old variable weights with new weights using a weighted average and decay for unchanged items.
     Args:
