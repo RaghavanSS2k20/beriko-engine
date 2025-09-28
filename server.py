@@ -1,4 +1,5 @@
 from flask import Flask, jsonify, request
+from flask_cors import CORS
 from mongoengine import connect
 import os
 from dotenv import load_dotenv
@@ -13,17 +14,22 @@ app = Flask(__name__)
 DB_URI = os.getenv("MONGO_URI")
 connect(host=DB_URI)
 
+# Load whitelisted origins from environment
+# Example in .env: WHITELISTED_ORIGINS=http://localhost:3000,http://example.com
+WHITELISTED_ORIGINS = os.getenv("WHITELISTED_ORIGINS", "").split(",")
+
+WHITELISTED_ORIGINS = [origin.strip() for origin in WHITELISTED_ORIGINS if origin.strip()]
+
+CORS(app, origins=WHITELISTED_ORIGINS)
+
+# Routes
 @app.route("/")
 def index():
     return jsonify({"message": "Welcome to the Flask API!"})
 
-
-app.register_blueprint(persona_route,url_prefix="/persona")
+app.register_blueprint(persona_route, url_prefix="/persona")
 app.register_blueprint(suggestions_module, url_prefix="/suggestions")
 app.register_blueprint(trait_route, url_prefix="/trait")
 
-
 if __name__ == '__main__':
     app.run(debug=True)
-
-
