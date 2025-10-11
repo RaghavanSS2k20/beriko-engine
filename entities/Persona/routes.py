@@ -1,5 +1,6 @@
 from flask import Blueprint, request, jsonify
 import json
+from .service import get_user_insights, get_persona_for_user
 
 persona_route = Blueprint("persona",__name__)
 from .model import Persona
@@ -47,4 +48,47 @@ def get_persona():
         return jsonify({"success": True, "data": result, "message": "All personas fetched successfully"})
     except Exception as e:
         return jsonify({"success": False, "error": str(e), "message": "Error fetching personas"}), 500
+
+@persona_route.get("/<user_id>")
+def get_persona_route(user_id):
+    try:
+        # ✅ Fetch persona using existing service
+        res = get_persona_for_user(user_id)
+
+        # ✅ If error inside service
+        if not res.get("success"):
+            return send_response(
+                success=False,
+                message=res.get("message", "Failed to fetch persona"),
+                error=res.get("error"),
+                status_code=404 if "not found" in res.get("message", "").lower() else 400,
+            )
+
+        # ✅ Success — send persona data
+        return send_response(
+            success=True,
+            data=res.get("data"),
+            message=res.get("message", "Persona fetched successfully"),
+        )
+
+    except Exception as e:
+        # ✅ Catch route-level exceptions
+        return send_response(
+            success=False,
+            error=str(e),
+            message="Error while processing persona",
+            status_code=500,
+        )
+
+@persona_route.get("/insights/<user_id>")
+def get_insigths(user_id):
+    res = get_user_insights(user_id)
+    if res["success"]:
+        return send_response(success=True,
+            data=res["data"]
+        )
+    else:
+        return send_response(success=False,
+            error=res["error"]
+        )
 

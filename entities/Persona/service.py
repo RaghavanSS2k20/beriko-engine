@@ -1,7 +1,10 @@
 from .model import Persona
+import json
+import numpy as np
 from ..Trait.model import Trait, Variable
 from templates.template import *
 from scripts.update_weights import update_variable_weights
+from scripts.suggest_profiles import get_matching_for_profile
 
 def handle_update_persona(user_id):
     template = ""
@@ -99,5 +102,81 @@ def update_interests(user_id, interests, alpha=0.3):
         for v in persona.intrests
     ]
     return {"success": True, "data": result}
+
+
+def get_user_insights(user_id):
+    if not user_id:
+        return {"success": False,"error":"User not found", "message": "User ID required"}
+
+    try:
+        # ✅ Fetch persona
+        persona = Persona.objects(user_id=user_id).first()
+        if not persona:
+            return {"success": False,"error":"Persona not found", "message": "Persona not found"}
+
+        # ✅ Fetch matches
+        matched_profiles = get_matching_for_profile(user_id) or []
+        print("MATCHO :",matched_profiles)
+        # ✅ Convert persona to JSON-safe form
+        # persona_data = (
+        #     persona.to_json()
+        #     if hasattr(persona, "to_json")
+        #     else json.loads(persona.to_json())
+        # )
+
+        # # ✅ Clean up NumPy types inside persona (if any)
+        # def clean_numpy(obj):
+        #     if isinstance(obj, np.generic):
+        #         return obj.item()
+        #     if isinstance(obj, dict):
+        #         return {k: clean_numpy(v) for k, v in obj.items()}
+        #     if isinstance(obj, list):
+        #         return [clean_numpy(i) for i in obj]
+        #     return obj
+
+        # persona_data = clean_numpy(persona_data)
+        persona_data = json.loads(persona.to_json())
+
+        # ✅ Build final response
+        return {
+            "success": True,
+            "data": {
+                "persona": persona_data,
+                "matches_count": len(matched_profiles),
+            },
+            "message": "User insights retrieved successfully",
+        }
+
+    except Exception as e:
+        return {
+            "success": False,
+            "error":e,
+            "message": f"Error fetching user insights: {str(e)}",
+        }
+    
+def get_persona_for_user(user_id):
+    if not user_id:
+        return {"success": False, "message": "User ID required"}
+
+    try:
+        persona = Persona.objects(user_id=user_id).first()
+        if not persona:
+            return {"success": False, "message": "Persona not found"}
+
+        # ✅ Use model's to_json() directly
+        persona_data = persona.to_json()
+
+        return {
+            "success": True,
+            "data": json.loads(persona_data),
+            "message": "Persona fetched successfully",
+        }
+
+    except Exception as e:
+        return {
+            "success": False,
+            "message": "Error fetching persona",
+            "error": str(e),
+        }
 
 
