@@ -13,6 +13,8 @@ def get_matching_for_profile(user_id, w1=0.4, w2=0.4, w3=0.2, top_k=10):
     Compute weighted similarity score between the given user and all other personas.
     Returns match list with reason for match (top trait type, exact overlap, and similarity %).
     """
+    if not user_id:
+        return
     query_persona = Persona.objects(user_id=user_id).first()
     if not query_persona:
         raise ValueError(f"No persona found for user_id={user_id}")
